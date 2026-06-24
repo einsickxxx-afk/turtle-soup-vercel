@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="바다거북 스프">
+<meta name="theme-color" content="#1A3A8F">
+<link rel="apple-touch-icon" href="icon.png">
+<title>바다거북 스프</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Special+Elite&family=Noto+Sans+KR:wght@400;700&display=swap');
+
+  :root {
+    --cobalt: #1A3A8F;
+    --orange: #E8440A;
+    --cream: #F2EBD9;
+    --ink: #1C1C1C;
+    --paper: #C9B99A;
+    --paper-light: #E5D9C3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cobalt);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--ink);
+    overflow-x: hidden;
+    position: relative;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 4px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bg-text {
+    position: fixed;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    pointer-events: none;
+    z-index: 0;
+    user-select: none;
+    line-height: 1;
+  }
+  .bg-text-1 { font-size: 18vw; top: -2vh; left: -2vw; }
+  .bg-text-2 { font-size: 12vw; bottom: 5vh; right: -1vw; transform: rotate(-8deg); }
+  .bg-text-3 { font-size: 8vw; top: 40vh; left: 5vw; transform: rotate(90deg); color: rgba(232,68,10,0.06); }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  header {
+    padding: 32px 0 20px;
+    position: relative;
+  }
+
+  .header-tape {
+    background: var(--orange);
+    color: var(--cream);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 3px;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+    transform: rotate(-1deg);
+  }
+
+  .header-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(52px, 12vw, 88px);
+    color: var(--cream);
+    line-height: 0.9;
+    letter-spacing: -2px;
+    position: relative;
+  }
+
+  .header-title span {
+    color: var(--orange);
+    display: block;
+  }
+
+  .header-sub {
+    font-family: 'Special Elite', cursive;
+    color: var(--paper);
+    font-size: 13px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  .compass-divider {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, var(--orange), transparent);
+    margin: 20px 0;
+    position: relative;
+  }
+  .compass-divider::after {
+    content: '◈';
+    position: absolute;
+    left: 0;
+    top: -8px;
+    color: var(--orange);
+    font-size: 18px;
+  }
+
+  .puzzle-card {
+    background: var(--cream);
+    position: relative;
+    padding: 28px 28px 36px;
+    margin-bottom: 4px;
+  }
+
+  .puzzle-card::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: var(--cream);
+    clip-path: polygon(0% 100%, 2% 20%, 5% 80%, 8% 10%, 11% 70%, 14% 30%, 17% 90%, 20% 15%, 23% 75%, 26% 40%, 29% 85%, 32% 20%, 35% 65%, 38% 10%, 41% 80%, 44% 25%, 47% 70%, 50% 35%, 53% 90%, 56% 15%, 59% 60%, 62% 20%, 65% 75%, 68% 30%, 71% 85%, 74% 10%, 77% 65%, 80% 25%, 83% 80%, 86% 15%, 89% 70%, 92% 35%, 95% 90%, 98% 20%, 100% 100%);
+  }
+
+  .puzzle-card::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    right: 0;
+    height: 14px;
+    background: var(--cream);
+    clip-path: polygon(0% 0%, 3% 80%, 6% 20%, 9% 90%, 12% 30%, 15% 70%, 18% 10%, 21% 85%, 24% 25%, 27% 60%, 30% 15%, 33% 75%, 36% 35%, 39% 90%, 42% 20%, 45% 65%, 48% 10%, 51% 80%, 54% 40%, 57% 85%, 60% 15%, 63% 70%, 66% 25%, 69% 80%, 72% 20%, 75% 75%, 78% 30%, 81% 85%, 84% 10%, 87% 65%, 90% 25%, 93% 80%, 96% 20%, 100% 0%);
+  }
+
+  .puzzle-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+
+  .puzzle-text {
+    font-family: 'Special Elite', cursive;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+
+  .puzzle-question {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--cobalt);
+    margin-top: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  .puzzle-placeholder {
+    color: var(--paper);
+    font-family: 'Special Elite', cursive;
+    font-size: 15px;
+    line-height: 2;
+    font-style: italic;
+  }
+
+  .status-strip {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0 16px;
+    flex-wrap: wrap;
+  }
+
+  .status-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    border: 1.5px solid;
+  }
+
+  .badge-active { border-color: var(--orange); color: var(--orange); }
+  .badge-idle { border-color: var(--paper); color: var(--paper); }
+  .badge-solved { border-color: #4CAF50; color: #4CAF50; }
+
+  .chat-area {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 160px;
+  }
+
+  .msg {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-user { flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .avatar-ai { background: var(--orange); color: var(--cream); }
+  .avatar-user { background: var(--cobalt); border: 1.5px solid var(--paper); color: var(--cream); }
+
+  .msg-bubble {
+    max-width: 78%;
+    padding: 12px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    position: relative;
+  }
+
+  .bubble-ai {
+    background: var(--cream);
+    color: var(--ink);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  }
+
+  .bubble-user {
+    background: rgba(255,255,255,0.08);
+    color: var(--cream);
+    border: 1px solid rgba(255,255,255,0.15);
+    clip-path: polygon(6px 0, 100% 0, 100% 100%, 0 100%, 0 6px);
+    text-align: right;
+  }
+
+  .bubble-answer {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 2px 8px;
+    margin-left: 6px;
+  }
+
+  .answer-yes { background: var(--cobalt); color: var(--cream); }
+  .answer-no { background: var(--orange); color: var(--cream); }
+  .answer-close { background: #7B5E3A; color: var(--cream); }
+
+  .loading-dots {
+    display: flex;
+    gap: 4px;
+    padding: 14px 16px;
+    background: var(--cream);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    background: var(--paper);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-6px); }
+  }
+
+  .input-section {
+    margin-top: 20px;
+    position: relative;
+  }
+
+  .input-tape {
+    background: var(--orange);
+    color: var(--cream);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 3px 10px;
+    display: inline-block;
+    margin-bottom: 0;
+  }
+
+  .input-wrapper {
+    display: flex;
+    gap: 0;
+    background: var(--cream);
+    border-top: 3px solid var(--orange);
+  }
+
+  textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 14px 16px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    resize: none;
+    min-height: 56px;
+    max-height: 120px;
+    line-height: 1.6;
+  }
+
+  textarea::placeholder {
+    color: var(--paper);
+    font-family: 'Special Elite', cursive;
+    font-size: 13px;
+  }
+
+  .send-btn {
+    background: var(--cobalt);
+    color: var(--cream);
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 2px;
+    transition: background 0.15s;
+    min-width: 64px;
+  }
+
+  .send-btn:hover { background: var(--orange); }
+  .send-btn:disabled { background: var(--paper); cursor: not-allowed; }
+
+  .action-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 7px 14px;
+    border: 1.5px solid;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-new { border-color: var(--cream); color: var(--cream); }
+  .btn-new:hover { background: var(--cream); color: var(--cobalt); }
+  .btn-hint { border-color: var(--paper); color: var(--paper); }
+  .btn-hint:hover { background: var(--paper); color: var(--cobalt); }
+
+  .hint-counter {
+    font-family: 'Special Elite', cursive;
+    font-size: 12px;
+    color: var(--paper);
+    margin-left: auto;
+    align-self: center;
+  }
+
+  .answer-reveal {
+    background: var(--orange);
+    color: var(--cream);
+    padding: 20px 24px;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .answer-reveal::before {
+    content: 'SOLUTION';
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 10px;
+    letter-spacing: 4px;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .answer-reveal p {
+    font-family: 'Special Elite', cursive;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--paper); }
+
+  @media (max-width: 480px) {
+    .puzzle-card { padding: 22px 20px 30px; }
+    .msg-bubble { max-width: 88%; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-text bg-text-1">SEA</div>
+<div class="bg-text bg-text-2">NEXT</div>
+<div class="bg-text bg-text-3">ONBOARD</div>
+
+<div class="container">
+  <header>
+    <div class="header-tape">LATERAL THINKING PUZZLE</div>
+    <h1 class="header-title">
+      바다거북
+      <span>스프</span>
+    </h1>
+    <p class="header-sub">예/아니오로만 진실에 닿을 수 있다</p>
+    <div class="compass-divider"></div>
+  </header>
+
+  <div class="status-strip">
+    <div class="status-badge badge-idle" id="statusBadge">대기 중</div>
+    <div class="status-badge badge-idle" id="questionCount">질문 0회</div>
+  </div>
+
+  <div class="puzzle-card">
+    <div class="puzzle-label">PUZZLE</div>
+    <div id="puzzleText" class="puzzle-placeholder">
+      새 문제 버튼을 눌러 시작하세요.<br>AI가 공포·스릴러 문제를 즉석에서 만들어냅니다.
+    </div>
+    <div id="puzzleQuestion" class="puzzle-question" style="display:none;"></div>
+  </div>
+
+  <div class="chat-area" id="chatArea"></div>
+  <div id="answerReveal" class="answer-reveal" style="display:none;"></div>
+
+  <div class="input-section">
+    <div class="input-tape">YOUR QUESTION</div>
+    <div class="input-wrapper">
+      <textarea id="userInput" placeholder="예/아니오로 답할 수 있는 질문을 입력하세요..." rows="2" disabled></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendQuestion()" disabled>전송</button>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn btn-new" onclick="newPuzzle()">새 문제</button>
+    <button class="action-btn btn-hint" onclick="requestHint()" id="hintBtn" disabled>힌트</button>
+    <button class="action-btn btn-hint" onclick="revealAnswer()" id="revealBtn" style="border-color:#E8440A;color:#E8440A;display:none;">정답 공개</button>
+    <span class="hint-counter" id="hintCounter"></span>
+  </div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `당신은 바다거북 스프(Lateral Thinking Puzzle) 게임의 진행자입니다.
+
+역할:
+1. 문제 생성 요청 시: 반드시 아래 JSON 형식으로만 응답하세요:
+{"type":"puzzle","title":"제목","situation":"상황 설명","question":"왜일까? / 어떻게 된 걸까?","answer":"정답 전체 설명","keywords":["핵심단서1","핵심단서2","핵심단서3"]}
+
+문제 작성 기준:
+- 상황은 4~5문장. 구체적 인물·장소·사건 포함.
+- 표면적으로 평범해 보이지만 핵심 맥락이 누락되어 있고, 읽는 사람이 진실과 반대 방향으로 추리하도록 유도할 것.
+- 정답은 3~4문장. 인과관계·인물 심리·반전 구조를 포함해 상세히.
+- 초자연 현상 금지. 논리적으로 완벽히 설명 가능해야 함.
+- 공포·스릴러·인간이 가장 무섭다는 테마 필수.
+
+2. 질문 응답 시: 반드시 아래 JSON 형식으로만 응답하세요:
+{"type":"answer","verdict":"yes|no|close","reply":"짧은 자연스러운 코멘트 (1문장, 단순 반복 없이)"}
+- yes: 맞다 / no: 아니다 / close: 절반 정도 맞거나 더 구체적으로 물어야 한다
+
+3. 힌트 요청 시:
+{"type":"hint","hint":"정답 방향만 암시하는 1문장. 직접 알려주지 않을 것."}
+
+주의사항:
+- 항상 JSON만 출력, 다른 텍스트 없이
+- AI 티 나는 표현 금지`;
+
+let gameState = {
+  puzzle: null,
+  answer: null,
+  questionCount: 0,
+  hintCount: 0,
+  isLoading: false,
+  conversationHistory: []
+};
+
+async function callClaude(userMessage) {
+  gameState.conversationHistory.push({ role: "user", content: userMessage });
+
+  if (gameState.conversationHistory.length > 16) {
+    const head = gameState.conversationHistory.slice(0, 2);
+    const tail = gameState.conversationHistory.slice(-14);
+    gameState.conversationHistory = [...head, ...tail];
+  }
+
+  let systemWithContext = SYSTEM_PROMPT;
+  if (gameState.puzzle) {
+    systemWithContext += `\n\n현재 문제 - 상황: ${gameState.puzzle.situation}\n정답: ${gameState.puzzle.answer}`;
+  }
+
+  let response;
+  try {
+    response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        system: systemWithContext,
+        messages: gameState.conversationHistory
+      })
+    });
+  } catch(e) {
+    gameState.conversationHistory.pop();
+    return { type: "error", reply: "네트워크 연결을 확인해 주세요." };
+  }
+
+  if (!response.ok) {
+    gameState.conversationHistory.pop();
+    return { type: "error", reply: `서버 오류 (${response.status}). 잠시 후 다시 시도해 주세요.` };
+  }
+
+  const data = await response.json();
+  const text = (data.content || []).map(i => i.text || "").join("");
+  gameState.conversationHistory.push({ role: "assistant", content: text });
+
+  try {
+    const clean = text.replace(/```json[\s\S]*?```|```/g, "").trim();
+    const jsonMatch = clean.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("no json");
+    return JSON.parse(jsonMatch[0]);
+  } catch(e) {
+    return { type: "error", reply: "응답 형식 오류가 났어요. 다시 시도해 주세요." };
+  }
+}
+
+function setLoading(bool) {
+  gameState.isLoading = bool;
+  document.getElementById('sendBtn').disabled = bool || !gameState.puzzle;
+  document.getElementById('hintBtn').disabled = bool || !gameState.puzzle;
+}
+
+function addMessage(role, content, verdict) {
+  const chatArea = document.getElementById('chatArea');
+  const msg = document.createElement('div');
+  msg.className = `msg ${role === 'user' ? 'msg-user' : ''}`;
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar ${role === 'user' ? 'avatar-user' : 'avatar-ai'}`;
+  avatar.textContent = role === 'user' ? 'YOU' : 'AI';
+  const bubble = document.createElement('div');
+  bubble.className = `msg-bubble ${role === 'user' ? 'bubble-user' : 'bubble-ai'}`;
+  if (verdict) {
+    const tag = document.createElement('span');
+    tag.className = `bubble-answer ${verdict === 'yes' ? 'answer-yes' : verdict === 'no' ? 'answer-no' : 'answer-close'}`;
+    tag.textContent = verdict === 'yes' ? 'YES' : verdict === 'no' ? 'NO' : 'CLOSE';
+    bubble.appendChild(tag);
+    bubble.appendChild(document.createTextNode(' ' + content));
+  } else {
+    bubble.textContent = content;
+  }
+  msg.appendChild(avatar);
+  msg.appendChild(bubble);
+  chatArea.appendChild(msg);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function showLoading() {
+  const chatArea = document.getElementById('chatArea');
+  const loadingEl = document.createElement('div');
+  loadingEl.className = 'msg';
+  loadingEl.id = 'loadingMsg';
+  loadingEl.innerHTML = `
+    <div class="msg-avatar avatar-ai">AI</div>
+    <div class="loading-dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>`;
+  chatArea.appendChild(loadingEl);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function hideLoading() {
+  const el = document.getElementById('loadingMsg');
+  if (el) el.remove();
+}
+
+async function newPuzzle() {
+  if (gameState.isLoading) return;
+  gameState.puzzle = null;
+  gameState.answer = null;
+  gameState.questionCount = 0;
+  gameState.hintCount = 0;
+  gameState.conversationHistory = [];
+  document.getElementById('chatArea').innerHTML = '';
+  document.getElementById('answerReveal').style.display = 'none';
+  document.getElementById('revealBtn').style.display = 'none';
+  document.getElementById('puzzleText').textContent = '';
+  document.getElementById('puzzleQuestion').style.display = 'none';
+  document.getElementById('hintCounter').textContent = '';
+  setLoading(true);
+  showLoading();
+  document.getElementById('statusBadge').textContent = '생성 중...';
+  document.getElementById('statusBadge').className = 'status-badge badge-active';
+  try {
+    const result = await callClaude("새로운 공포/스릴러 바다거북 스프 문제를 만들어줘.");
+    hideLoading();
+    if (result.type === 'puzzle') {
+      gameState.puzzle = result;
+      gameState.answer = result.answer;
+      document.getElementById('puzzleText').className = 'puzzle-text';
+      document.getElementById('puzzleText').textContent = result.situation;
+      document.getElementById('puzzleQuestion').textContent = result.question;
+      document.getElementById('puzzleQuestion').style.display = 'block';
+      document.getElementById('statusBadge').textContent = '진행 중';
+      document.getElementById('statusBadge').className = 'status-badge badge-active';
+      document.getElementById('userInput').disabled = false;
+      document.getElementById('hintBtn').disabled = false;
+      document.getElementById('revealBtn').style.display = 'inline-block';
+      addMessage('ai', '문제 준비됐어요. 예/아니오로 답할 수 있는 질문을 해보세요.');
+    }
+  } catch(e) {
+    hideLoading();
+    addMessage('ai', '문제 생성에 실패했어요. 다시 시도해 주세요.');
+  }
+  setLoading(false);
+}
+
+async function sendQuestion() {
+  const input = document.getElementById('userInput');
+  const question = input.value.trim();
+  if (!question || gameState.isLoading || !gameState.puzzle) return;
+  input.value = '';
+  gameState.questionCount++;
+  document.getElementById('questionCount').textContent = `질문 ${gameState.questionCount}회`;
+  addMessage('user', question);
+  setLoading(true);
+  showLoading();
+  try {
+    const result = await callClaude(`플레이어 질문: "${question}"`);
+    hideLoading();
+    if (result.type === 'answer') {
+      addMessage('ai', result.reply, result.verdict);
+    } else if (result.type === 'error') {
+      addMessage('ai', result.reply);
+    }
+  } catch(e) {
+    hideLoading();
+    addMessage('ai', '오류가 났어요. 다시 시도해 주세요.');
+  }
+  setLoading(false);
+}
+
+async function requestHint() {
+  if (gameState.isLoading || !gameState.puzzle) return;
+  gameState.hintCount++;
+  document.getElementById('hintCounter').textContent = `힌트 ${gameState.hintCount}회 사용`;
+  setLoading(true);
+  showLoading();
+  try {
+    const result = await callClaude("힌트를 요청합니다.");
+    hideLoading();
+    if (result.type === 'hint') {
+      addMessage('ai', `힌트: ${result.hint}`);
+    } else if (result.type === 'error') {
+      addMessage('ai', result.reply);
+    }
+  } catch(e) {
+    hideLoading();
+    addMessage('ai', '오류가 났어요.');
+  }
+  setLoading(false);
+}
+
+async function revealAnswer() {
+  if (!gameState.answer) return;
+  document.getElementById('revealBtn').style.display = 'none';
+  document.getElementById('statusBadge').textContent = '완료';
+  document.getElementById('statusBadge').className = 'status-badge badge-solved';
+  document.getElementById('userInput').disabled = true;
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('hintBtn').disabled = true;
+  const revealEl = document.getElementById('answerReveal');
+  revealEl.style.display = 'block';
+  revealEl.innerHTML = `<p>${gameState.answer}</p>`;
+  revealEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('userInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendQuestion();
+  }
+});
+</script>
+
+<script>
+window.addEventListener('load', () => {
+  const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const isStandalone = window.navigator.standalone;
+  if (isIos && !isStandalone) {
+    const banner = document.createElement('div');
+    banner.id = 'pwa-banner';
+    banner.style.cssText = `
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+      background: #F2EBD9; color: #1C1C1C;
+      padding: 14px 20px 32px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 13px; line-height: 1.6;
+      border-top: 3px solid #E8440A;
+      display: flex; align-items: flex-start; gap: 12px;
+    `;
+    banner.innerHTML = `
+      <div style="flex:1">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:14px;letter-spacing:1px;color:#E8440A;margin-bottom:4px;">홈화면에 추가하기</div>
+        하단 공유 버튼(↑)을 누른 후 <strong>"홈 화면에 추가"</strong>를 선택하면 앱처럼 사용할 수 있어요.
+      </div>
+      <button onclick="document.getElementById('pwa-banner').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#C9B99A;padding:0;">✕</button>
+    `;
+    document.body.appendChild(banner);
+  }
+});
+</script>
+</body>
+</html>
